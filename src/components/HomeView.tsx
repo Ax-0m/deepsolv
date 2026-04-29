@@ -367,8 +367,15 @@ export default function HomeView() {
                 </strong>{" "}
                 of <strong className="text-yellow-300">{totalCount.toLocaleString()}</strong>
               </span>
-              <span className="pixel-text text-[8px]">
-                Page <strong className="text-yellow-300">{safePage}</strong> / {totalPages}
+              <span className="pixel-text flex items-center gap-2 text-[8px]">
+                {detailQuery.isFetching ? (
+                  <span className="pixel-text inline-flex items-center gap-1 rounded-sm border-2 border-dex-black bg-yellow-300 px-1.5 py-0.5 text-[8px] text-dex-black animate-blink">
+                    Updating...
+                  </span>
+                ) : null}
+                <span>
+                  Page <strong className="text-yellow-300">{safePage}</strong> / {totalPages}
+                </span>
               </span>
             </div>
 
@@ -378,16 +385,7 @@ export default function HomeView() {
                 message={(detailQuery.error as Error).message}
               />
             ) : sortedCards.length > 0 ? (
-              <div className="relative">
-                <PokemonGrid pokemon={sortedCards} />
-                {detailQuery.isFetching ? (
-                  <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-center">
-                    <span className="pixel-text mt-2 rounded-sm border-2 border-dex-black bg-yellow-300 px-2 py-1 text-[8px] text-dex-black shadow-pixel-sm">
-                      Updating...
-                    </span>
-                  </div>
-                ) : null}
-              </div>
+              <PokemonGrid pokemon={sortedCards} />
             ) : detailQuery.isLoading ? (
               <CardSkeletonGrid count={pageSlice.length || PAGE_SIZE} />
             ) : (

@@ -25,7 +25,7 @@ export default function SearchBar({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="pixel-mono h-11 w-full rounded-sm border-2 border-dex-black bg-surface pl-9 pr-10 text-base font-bold tracking-wide outline-none shadow-pixel-sm transition focus:bg-yellow-50 focus:shadow-pixel"
+        className="pixel-mono h-11 w-full rounded-sm border-2 border-dex-black bg-surface pl-9 pr-10 text-base font-bold tracking-wide text-dex-black caret-dex-red placeholder:text-dex-black/45 outline-none shadow-pixel-sm transition focus:bg-yellow-50 focus:shadow-pixel"
         aria-label="Search Pokémon"
       />
       {value ? (
