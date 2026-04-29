@@ -51,9 +51,6 @@ export default function RootLayout({
           <div className="flex min-h-screen flex-col">
             <Header />
             <main className="flex-1">{children}</main>
-            <footer className="border-t border-border py-6 text-center text-[10px] uppercase tracking-widest text-foreground/60 font-pixel">
-              Data from PokéAPI · Built with Next.js
-            </footer>
           </div>
           <Toaster />
         </Providers>
