@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useFavorites } from "@/hooks/useFavorites";
@@ -32,8 +32,6 @@ export default function FavoriteButton({
   const { isFavorite, toggle, isReady, isPending } = useFavorites();
   const { status } = useSession();
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   const active = isReady && isFavorite(id);
   const pending = isPending(id);
   const cfg = SIZE_MAP[size];
@@ -55,12 +53,10 @@ export default function FavoriteButton({
         variant: "release",
         spriteId: id,
       });
-      const query = searchParams?.toString();
-      const callback = pathname
-        ? query
-          ? `${pathname}?${query}`
-          : pathname
-        : "/";
+      const callback =
+        typeof window !== "undefined"
+          ? `${window.location.pathname}${window.location.search}`
+          : "/";
       router.push(`/login?callbackUrl=${encodeURIComponent(callback)}`);
       return;
     }
