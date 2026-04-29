@@ -5,9 +5,13 @@ import { motion } from "framer-motion";
 
 interface Props {
   authConfigured: boolean;
+  callbackUrl?: string;
 }
 
-export default function LoginForm({ authConfigured }: Props) {
+export default function LoginForm({
+  authConfigured,
+  callbackUrl = "/",
+}: Props) {
   return (
     <div className="mx-auto flex max-w-md flex-col items-center justify-center gap-6 px-4 py-16 text-center">
       <motion.div
@@ -31,7 +35,7 @@ export default function LoginForm({ authConfigured }: Props) {
           {authConfigured ? (
             <button
               type="button"
-              onClick={() => signIn("github", { callbackUrl: "/" })}
+              onClick={() => signIn("github", { callbackUrl })}
               className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-foreground px-4 text-sm font-medium text-background transition hover:opacity-90"
             >
               <span className="font-bold" aria-hidden>

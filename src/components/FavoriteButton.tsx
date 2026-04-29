@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useSounds } from "@/hooks/useSounds";
@@ -28,6 +30,10 @@ export default function FavoriteButton({
   className = "",
 }: Props) {
   const { isFavorite, toggle, isReady, isPending } = useFavorites();
+  const { status } = useSession();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const active = isReady && isFavorite(id);
   const pending = isPending(id);
   const cfg = SIZE_MAP[size];
@@ -40,6 +46,25 @@ export default function FavoriteButton({
     e.preventDefault();
     e.stopPropagation();
     if (pending) return;
+
+    if (status !== "authenticated") {
+      play("click");
+      pushToast({
+        title: "SIGN IN",
+        message: "Sign in to catch and save Pokémon.",
+        variant: "release",
+        spriteId: id,
+      });
+      const query = searchParams?.toString();
+      const callback = pathname
+        ? query
+          ? `${pathname}?${query}`
+          : pathname
+        : "/";
+      router.push(`/login?callbackUrl=${encodeURIComponent(callback)}`);
+      return;
+    }
+
     const willActivate = !active;
     const displayName = name
       ? formatPokemonName(name)

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useSoundStore } from "@/store/sound";
@@ -10,6 +10,7 @@ import PokeBall from "./PokeBall";
 
 export default function Header() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { data: session, status } = useSession();
   const { ids, isReady } = useFavorites();
   const hydrated = isReady;
@@ -130,7 +131,13 @@ export default function Header() {
               type="button"
               onClick={() => {
                 play("click");
-                signIn();
+                const query = searchParams?.toString();
+                const callbackUrl = pathname
+                  ? query
+                    ? `${pathname}?${query}`
+                    : pathname
+                  : "/";
+                signIn(undefined, { callbackUrl });
               }}
               className="pixel-btn rounded-sm bg-yellow-300 px-2.5 py-1.5 text-[9px] text-dex-red-deep"
             >
